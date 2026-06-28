@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TasksApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="tasks.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.chrisnesbit.tasks.TasksApplication" />
+    <option name="ACTIVE_PROFILES" value="" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+    <option name="ENABLE_DEBUG_OUTPUT" value="false" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <option name="PROGRAM_PARAMETERS" value="" />
+    <option name="VM_PARAMETERS" value="" />
+    <envs />
+    <method v="2">
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks="classes" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
+    </method>
+  </configuration>
+</component>
