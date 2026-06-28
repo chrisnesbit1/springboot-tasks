@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.chrisnesbit.tasks.controller.TaskControllerTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-06-28T03:20:53.348Z" hostname="MacBook-Pro-8.lan" time="0.716">
+  <properties/>
+  <testcase name="getTasksReturnsEmptyList()" classname="com.chrisnesbit.tasks.controller.TaskControllerTests" time="0.152"/>
+  <system-out><![CDATA[2026-06-27T23:20:53.351-04:00  INFO 25931 --- [tasks] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.chrisnesbit.tasks.controller.TaskControllerTests]: TaskControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-27T23:20:53.367-04:00  INFO 25931 --- [tasks] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.chrisnesbit.tasks.TasksApplication for test class com.chrisnesbit.tasks.controller.TaskControllerTests
+2026-06-27T23:20:53.369-04:00  INFO 25931 --- [tasks] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.chrisnesbit.tasks.controller.TaskControllerTests]: TaskControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-06-27T23:20:53.371-04:00  INFO 25931 --- [tasks] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.chrisnesbit.tasks.TasksApplication for test class com.chrisnesbit.tasks.controller.TaskControllerTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.0.7)
+
+2026-06-27T23:20:53.403-04:00  INFO 25931 --- [tasks] [    Test worker] c.c.t.controller.TaskControllerTests     : Starting TaskControllerTests using Java 21.0.11 with PID 25931 (started by chris in /Users/chris/IdeaProjects/springboot-tasks)
+2026-06-27T23:20:53.404-04:00  INFO 25931 --- [tasks] [    Test worker] c.c.t.controller.TaskControllerTests     : No active profile set, falling back to 1 default profile: "default"
+2026-06-27T23:20:53.880-04:00  INFO 25931 --- [tasks] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-06-27T23:20:53.880-04:00  INFO 25931 --- [tasks] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-06-27T23:20:53.883-04:00  INFO 25931 --- [tasks] [    Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-27T23:20:53.887-04:00  INFO 25931 --- [tasks] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 6 ms
+2026-06-27T23:20:53.908-04:00  INFO 25931 --- [tasks] [    Test worker] c.c.t.controller.TaskControllerTests     : Started TaskControllerTests in 0.53 seconds (process running for 5.029)
+2026-06-27T23:20:53.910-04:00  WARN 25931 --- [tasks] [    Test worker] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-06-27T23:20:53.910-04:00  WARN 25931 --- [tasks] [    Test worker] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
