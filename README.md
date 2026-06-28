@@ -1,6 +1,6 @@
-Spring Boot Task Tracker API
+# Spring Boot Task Tracker API
 
-Overview
+## Overview
 
 This project is a lightweight Task Tracker REST API built with Spring Boot.
 
@@ -8,9 +8,7 @@ The intent of this project is to demonstrate familiarity with the Spring Boot ec
 
 As an experienced backend engineer whose production experience has primarily been in the .NET ecosystem, this project demonstrates the ability to quickly learn and apply Spring Boot while following production-oriented software engineering practices.
 
-⸻
-
-Goals
+## Goals
 
 * Demonstrate Spring Boot fundamentals
 * Build a well-structured REST API
@@ -19,27 +17,25 @@ Goals
 * Produce a polished GitHub portfolio project
 * Deploy the application to AWS
 
-⸻
+## Tech Stack
 
-Tech Stack
+| Technology | Purpose |
+| --- | --- |
+| Java 21 | Language |
+| Spring Boot 3.x | Application Framework |
+| Gradle | Build |
+| Spring Web | REST API |
+| Spring Validation | Request Validation |
+| SpringDoc OpenAPI | Swagger Documentation |
+| JUnit 5 | Unit Testing |
+| Mockito | Mocking |
+| Git / GitHub | Source Control |
+| AWS Elastic Beanstalk | Hosting |
+| ConcurrentHashMap | Initial In-Memory Persistence |
 
-Technology	Purpose
-Java 21	Language
-Spring Boot 3.x	Application Framework
-Gradle	Build
-Spring Web	REST API
-Spring Validation	Request Validation
-SpringDoc OpenAPI	Swagger Documentation
-JUnit 5	Unit Testing
-Mockito	Mocking
-Git / GitHub	Source Control
-AWS Elastic Beanstalk	Hosting
-ConcurrentHashMap	Initial In-Memory Persistence
+## Architecture
 
-⸻
-
-Architecture
-
+```text
 Controller
     ↓
 Service
@@ -47,9 +43,11 @@ Service
 Repository
     ↓
 In-Memory Data Store
+```
 
-Project Structure
+## Project Structure
 
+```text
 controller/
 service/
 repository/
@@ -57,10 +55,9 @@ dto/
 model/
 exception/
 config/
+```
 
-⸻
-
-Features
+## Features
 
 * CRUD Task Management
 * RESTful API
@@ -72,10 +69,9 @@ Features
 * Unit Tests
 * Clean Separation of Concerns
 
-⸻
+## Task Model
 
-Task Model
-
+```text
 Task
 -----
 id : UUID
@@ -84,11 +80,11 @@ description : String
 status : OPEN | IN_PROGRESS | COMPLETED
 createdDate
 completedDate
+```
 
-⸻
+## REST Endpoints
 
-REST Endpoints
-
+```http
 GET     /tasks
 GET     /tasks/{id}
 GET     /tasks?status=OPEN
@@ -96,22 +92,19 @@ POST    /tasks
 PUT     /tasks/{id}
 DELETE  /tasks/{id}
 GET     /tasks/summary
+```
 
 The optional summary endpoint returns aggregate information (counts by status) to demonstrate business-oriented API design beyond basic CRUD operations.
 
-⸻
+## Validation
 
-Validation
-
-Examples
+### Examples
 
 * Title is required
 * Title maximum length
 * Description maximum length
 
-⸻
-
-Error Handling
+## Error Handling
 
 A global exception handler returns consistent error responses for:
 
@@ -119,9 +112,7 @@ A global exception handler returns consistent error responses for:
 * Resource not found
 * Unexpected server errors
 
-⸻
-
-Testing
+## Testing
 
 Unit tests cover:
 
@@ -130,29 +121,25 @@ Unit tests cover:
 * Exception handling
 * Repository interactions (mocked)
 
-⸻
-
-API Documentation
+## API Documentation
 
 Swagger/OpenAPI is enabled.
 
 The API can be explored interactively using Swagger UI, allowing reviewers to create, update, delete, and query tasks directly from the browser without additional tools.
 
-⸻
+## Deployment
 
-Deployment
-
-Deployment Target
+### Deployment Target
 
 AWS Elastic Beanstalk
 
-Deployment Artifact
+### Deployment Artifact
 
+```text
 task-tracker.jar
+```
 
-⸻
-
-Future Enhancements
+## Future Enhancements
 
 This project intentionally keeps its scope small so the emphasis remains on Spring Boot fundamentals and clean backend architecture rather than feature count.
 
@@ -172,18 +159,18 @@ Potential enhancements include:
 
 These enhancements were intentionally deferred to keep the initial implementation focused and to demonstrate that the project was scoped deliberately rather than left incomplete.
 
-⸻
+## Running Locally
 
-Running Locally
-
+```bash
 ./gradlew bootRun
+```
 
-Swagger UI
+## Swagger UI
 
+```text
 http://localhost:8080/swagger-ui/index.html
+```
 
-⸻
-
-Purpose
+## Purpose
 
 This project demonstrates the ability to quickly learn and apply a new framework while leveraging established backend engineering experience, including layered architecture, REST API design, dependency injection, validation, testing, and maintainable code organization.
