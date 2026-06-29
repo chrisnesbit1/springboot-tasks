@@ -1,0 +1,12 @@
+# Gradle
+.gradle/
+build/
+
+# IntelliJ IDEA generated/user-local files
+.idea/workspace.xml
+.idea/modules.xml
+.idea/modules/
+*.iml
+
+# macOS
+.DS_Store
