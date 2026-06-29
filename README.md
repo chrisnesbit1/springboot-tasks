@@ -4,34 +4,41 @@
 
 This project is a lightweight Task Tracker REST API built with Spring Boot.
 
-The intent of this project is to demonstrate familiarity with the Spring Boot ecosystem and modern backend development practices. Rather than building a feature-rich application, the focus is on clean architecture, maintainable code, REST API design, validation, testing, and documentation.
+The goal was to spend a focused weekend ramping up on Spring Boot and produce a small, working backend service with clear structure, tests, validation, and API documentation. The scope is intentionally narrow: it is not a full product, but it is meant to show the kind of production-oriented habits I would bring while learning a newer stack.
 
-As an experienced backend engineer whose production experience has primarily been in the .NET ecosystem, this project demonstrates the ability to quickly learn and apply Spring Boot while following production-oriented software engineering practices.
+My production background has primarily been in the .NET ecosystem, so this repository is also a practical exercise in transferring backend engineering patterns—layered architecture, dependency injection, validation, error handling, and automated tests—into a Java/Spring Boot project.
 
-## Goals
+## Current Scope
 
-* Demonstrate Spring Boot fundamentals
-* Build a well-structured REST API
-* Follow clean architecture principles
-* Showcase production-style coding practices
-* Produce a polished GitHub portfolio project
-* Deploy the application to AWS
+This version includes:
+
+* A Spring Boot REST API for task management
+* Layered controller, service, and repository structure
+* In-memory persistence through a repository abstraction
+* DTO-based request and response models
+* Bean Validation for request input
+* Global exception handling with consistent API error responses
+* Swagger/OpenAPI documentation for local exploration
+* Unit and web-layer tests around the main API behavior
+* A GitHub Actions workflow that runs the Gradle build on pushes and pull requests to `main`
+
+Deployment, durable persistence, authentication, and production operations are intentionally out of scope for this initial version and are listed under [Future Enhancements](#future-enhancements).
 
 ## Tech Stack
 
 | Technology | Purpose |
 | --- | --- |
 | Java 21 | Language |
-| Spring Boot 4.x | Application Framework |
+| Spring Boot 4.x | Application framework |
 | Gradle | Build |
 | Spring Web | REST API |
-| Spring Validation | Request Validation |
-| SpringDoc OpenAPI | Swagger Documentation |
-| JUnit 5 | Unit Testing |
+| Spring Validation | Request validation |
+| SpringDoc OpenAPI | Swagger documentation |
+| JUnit 5 | Testing |
 | Mockito | Mocking |
-| Git / GitHub | Source Control |
-| AWS Elastic Beanstalk | Hosting |
-| ConcurrentHashMap | Initial In-Memory Persistence |
+| Git / GitHub | Source control |
+| GitHub Actions | CI build and test workflow |
+| ConcurrentHashMap | Initial in-memory persistence |
 
 ## Architecture
 
@@ -54,19 +61,29 @@ repository/
 dto/
 model/
 exception/
+config/
 ```
 
-## Features
+## What I Built
 
-* CRUD Task Management
-* RESTful API
-* DTO-based requests/responses
-* Dependency Injection
+At a practical level, this demo includes:
+
+* CRUD task management
+* RESTful API endpoints
+* Optional task filtering by status
+* Summary endpoint with aggregate counts by status
+* Created and completed timestamps on task records
+* Automatic `OPEN` status assignment when tasks are created
+* Completion timestamp handling when tasks move to `COMPLETED`
+* DTO-based requests and responses
+* Dependency injection
 * Bean Validation
-* Global Exception Handling
-* Swagger/OpenAPI Documentation
-* Unit Tests
-* Clean Separation of Concerns
+* Global exception handling
+* Swagger/OpenAPI documentation with operation metadata
+* Automated tests for service, controller, and exception behavior
+* GitHub Actions workflow that runs `./gradlew build` on pushes and pull requests to `main`
+* Gradle WAR packaging and `SpringBootServletInitializer` setup as preparation for servlet-container-style deployment
+* Clean separation of concerns
 
 ## Task Model
 
@@ -93,70 +110,48 @@ DELETE  /tasks/{id}
 GET     /tasks/summary
 ```
 
-The optional summary endpoint returns aggregate information (counts by status) to demonstrate business-oriented API design beyond basic CRUD operations.
+The summary endpoint returns aggregate task counts by status. It is included to show a small amount of business-oriented API behavior beyond basic CRUD operations.
 
 ## Validation
 
-### Examples
+Request validation is handled at the API boundary. Examples include:
 
 * Title is required
-* Title maximum length
-* Description maximum length
+* Title has a maximum length
+* Description has a maximum length
+* Status is required when updating a task
 
 ## Error Handling
 
 A global exception handler returns consistent error responses for:
 
 * Validation failures
-* Resource not found
+* Resource not found errors
 * Unexpected server errors
 
-## Testing
+## Testing and CI
 
-Unit tests cover:
+Tests cover the main behavior in this initial scope, including:
 
-* Service layer
-* Validation
-* Exception handling
-* Repository interactions (mocked)
+* Service-layer task operations
+* Status filtering and summary counts
+* Controller request/response behavior
+* Validation failures
+* Not-found handling
+* Global exception handling
+* Repository interactions through mocked dependencies
+
+There is also a GitHub Actions workflow that runs `./gradlew build` for pushes and pull requests targeting `main`. That build includes the Gradle test task as part of the normal lifecycle. A second workflow job submits the Gradle dependency graph on pushes to `main`.
 
 ## API Documentation
 
-Swagger/OpenAPI is enabled.
+Swagger/OpenAPI is enabled for local use.
 
-The API can be explored interactively using Swagger UI, allowing reviewers to create, update, delete, and query tasks directly from the browser without additional tools.
-
-## Deployment
-
-### Deployment Target
-
-AWS Elastic Beanstalk
-
-### Deployment Artifact
+After starting the application, the API can be explored interactively in the browser:
 
 ```text
-task-tracker.jar
+http://localhost:8080/swagger-ui/index.html
 ```
-
-## Future Enhancements
-
-This project intentionally keeps its scope small so the emphasis remains on Spring Boot fundamentals and clean backend architecture rather than feature count.
-
-Potential enhancements include:
-
-* Replace the in-memory repository with DynamoDB
-* Add Spring Security with Basic Authentication
-* Docker containerization
-* GitHub Actions deployment pipeline
-* CloudWatch logging and monitoring
-* Pagination and sorting
-* Search endpoints
-* Health checks with Spring Boot Actuator
-* Metrics and observability
-* Integration tests
-* Repository abstraction backed by multiple persistence implementations
-
-These enhancements were intentionally deferred to keep the initial implementation focused and to demonstrate that the project was scoped deliberately rather than left incomplete.
 
 ## Running Locally
 
@@ -164,12 +159,39 @@ These enhancements were intentionally deferred to keep the initial implementatio
 ./gradlew bootRun
 ```
 
-## Swagger UI
+Run the test suite with:
 
-```text
-http://localhost:8080/swagger-ui/index.html
+```bash
+./gradlew test
 ```
 
-## Purpose
+## What Is Not Included Yet
 
-This project demonstrates the ability to quickly learn and apply a new framework while leveraging established backend engineering experience, including layered architecture, REST API design, dependency injection, validation, testing, and maintainable code organization.
+A few pieces are deliberately not presented as complete in this repository:
+
+* **AWS Elastic Beanstalk deployment** - the project has not been deployed yet. Deployment is a logical next step, not part of the current demo scope.
+* **Durable persistence** - tasks are stored in memory, so data resets when the application restarts.
+* **Authentication and authorization** - the API is currently open for local/demo usage.
+* **Deployment automation** - CI exists for build/test, but there is not yet an automated deployment pipeline.
+* **Containerization** - Docker support has not been added.
+* **Production observability** - Actuator is available as a dependency, but health checks, metrics, dashboards, and log aggregation have not been configured as a complete operational setup.
+* **Integration tests against real infrastructure** - current tests focus on service, controller, validation, and exception behavior.
+
+## Future Enhancements
+
+Potential next steps include:
+
+* Deploy the application to AWS Elastic Beanstalk
+* Replace the in-memory repository with DynamoDB or another durable datastore
+* Add Spring Security with Basic Authentication or token-based authentication
+* Add Docker containerization
+* Extend the existing GitHub Actions workflow with automated deployment
+* Configure CloudWatch logging and monitoring
+* Expose and document Spring Boot Actuator health checks
+* Add pagination and sorting
+* Add search endpoints
+* Add metrics and observability dashboards
+* Add integration tests
+* Support multiple repository implementations behind the existing repository abstraction
+
+These were intentionally deferred so the initial version could stay focused on learning the Spring Boot workflow and building a clean, reviewable API in a short timeframe.
