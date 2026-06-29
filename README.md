@@ -22,7 +22,7 @@ As an experienced backend engineer whose production experience has primarily bee
 | Technology | Purpose |
 | --- | --- |
 | Java 21 | Language |
-| Spring Boot 3.x | Application Framework |
+| Spring Boot 4.x | Application Framework |
 | Gradle | Build |
 | Spring Web | REST API |
 | Spring Validation | Request Validation |
@@ -54,7 +54,6 @@ repository/
 dto/
 model/
 exception/
-config/
 ```
 
 ## Features
@@ -148,7 +147,7 @@ Potential enhancements include:
 * Replace the in-memory repository with DynamoDB
 * Add Spring Security with Basic Authentication
 * Docker containerization
-* GitHub Actions CI/CD pipeline
+* GitHub Actions deployment pipeline
 * CloudWatch logging and monitoring
 * Pagination and sorting
 * Search endpoints

@@ -1,15 +1,19 @@
 package com.chrisnesbit.tasks.service;
 
 import com.chrisnesbit.tasks.dto.CreateTaskRequest;
+import com.chrisnesbit.tasks.dto.SummaryResponse;
 import com.chrisnesbit.tasks.dto.TaskResponse;
 import com.chrisnesbit.tasks.dto.UpdateTaskRequest;
+import com.chrisnesbit.tasks.exception.TaskNotFoundException;
 import com.chrisnesbit.tasks.model.Task;
 import com.chrisnesbit.tasks.model.TaskStatus;
 import com.chrisnesbit.tasks.repository.TaskRepository;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -22,14 +26,38 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public List<TaskResponse> getTasks() {
-        return taskRepository.findAll().stream()
-                .map(this::toResponse)
-                .toList();
+    public List<TaskResponse> getTasks(TaskStatus status) {
+        if (status == null) {
+            return taskRepository.findAll().stream()
+                    .map(this::toResponse)
+                    .toList();
+        } else {
+            return taskRepository.findAll().stream()
+                    .filter(task -> task.status() == status)
+                    .map(this::toResponse)
+                    .toList();
+        }
+    }
+
+    public SummaryResponse getSummary() {
+        List<Task> tasks = taskRepository.findAll();
+        Map<TaskStatus, Long> counts = tasks.stream()
+                .collect(Collectors.groupingBy(
+                        Task::status,
+                        Collectors.counting()
+                ));
+
+        return new SummaryResponse(counts, tasks.size());
     }
 
     public TaskResponse getTask(UUID id) {
-        return taskRepository.findById(id).map(this::toResponse).orElse(null);
+        Task existingTask = taskRepository.findById(id).orElse(null);
+
+        if (existingTask == null) {
+            throw new TaskNotFoundException(id);
+        }
+
+        return toResponse(existingTask);
     }
 
     public TaskResponse createTask(CreateTaskRequest request) {
@@ -48,7 +76,7 @@ public class TaskService {
         Task existingTask = taskRepository.findById(id).orElse(null);
 
         if (existingTask == null) {
-            return null;
+            throw new TaskNotFoundException(id);
         }
 
         Instant completedDate = request.status() == TaskStatus.COMPLETED
@@ -68,6 +96,10 @@ public class TaskService {
     }
 
     public void deleteTask(UUID id) {
+        if (!taskRepository.existsById(id)) {
+            throw new TaskNotFoundException(id);
+        }
+
         taskRepository.deleteById(id);
     }
 
