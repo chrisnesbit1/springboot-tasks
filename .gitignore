@@ -2,11 +2,12 @@
 .gradle/
 build/
 
-# IntelliJ IDEA generated/user-local files
-.idea/workspace.xml
-.idea/modules.xml
-.idea/modules/
+# IntelliJ IDEA
+.idea/
 *.iml
 
 # macOS
 .DS_Store
+
+# Spring Initializr generated reference file
+HELP.md
