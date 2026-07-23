@@ -165,6 +165,10 @@ Run the test suite with:
 ./gradlew test
 ```
 
+## Frontend
+
+A small Vue 3 + TypeScript client lives in [`frontend/`](frontend/README.md), covering task list/create/complete/delete against this API. See [`docs/vue-implementation-summary.md`](docs/vue-implementation-summary.md) for the full write-up, and [`docs/ai-assisted-development-plan.md`](docs/ai-assisted-development-plan.md) / [`docs/ai-assisted-review-notes.md`](docs/ai-assisted-review-notes.md) for how it was planned and reviewed.
+
 ## What Is Not Included Yet
 
 A few pieces are deliberately not presented as complete in this repository:
