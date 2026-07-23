@@ -1,5 +1,9 @@
 # Spring Boot Task Tracker API
 
+<img width="900" height="703" alt="image" src="https://github.com/user-attachments/assets/1225411d-164a-4382-8f1e-d660186bf052" />
+<img width="1510" height="913" alt="image" src="https://github.com/user-attachments/assets/0f80a20f-7b57-406c-ae0a-d999c9bd9dee" />
+
+
 ## Overview
 
 This project is a lightweight Task Tracker REST API built with Spring Boot.
@@ -164,6 +168,10 @@ Run the test suite with:
 ```bash
 ./gradlew test
 ```
+
+## Frontend
+
+A small Vue 3 + TypeScript client lives in [`frontend/`](frontend/README.md), covering task list/create/complete/delete against this API. See [`docs/vue-implementation-summary.md`](docs/vue-implementation-summary.md) for the full write-up, and [`docs/ai-assisted-development-plan.md`](docs/ai-assisted-development-plan.md) / [`docs/ai-assisted-review-notes.md`](docs/ai-assisted-review-notes.md) for how it was planned and reviewed.
 
 ## What Is Not Included Yet
 
