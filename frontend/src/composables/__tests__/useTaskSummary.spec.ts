@@ -59,12 +59,19 @@ describe('useTaskSummary', () => {
     const secondRefresh = result.refresh()
 
     expect(firstSignal?.aborted).toBe(true)
-    second.resolve({ counts: { OPEN: 1 }, totalTasks: 1 })
 
-    await Promise.all([firstRefresh, secondRefresh])
+    // The aborted first request settles before the second, still-in-flight
+    // one resolves. Its own `finally` must not be allowed to clear
+    // `loading` in the meantime.
+    await firstRefresh
+    expect(result.loading.value).toBe(true)
+
+    second.resolve({ counts: { OPEN: 1 }, totalTasks: 1 })
+    await secondRefresh
 
     expect(result.summary.value).toEqual({ counts: { OPEN: 1 }, totalTasks: 1 })
     expect(result.error.value).toBeNull()
+    expect(result.loading.value).toBe(false)
   })
 
   it('aborts an in-flight refresh when the component unmounts', async () => {

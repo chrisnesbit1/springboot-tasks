@@ -142,13 +142,20 @@ describe('useTasks', () => {
     const secondLoad = result.load()
 
     expect(firstSignal?.aborted).toBe(true)
-    second.resolve([openTask])
 
-    await Promise.all([firstLoad, secondLoad])
+    // The aborted first request settles (via its abort listener) before the
+    // second, still-in-flight request resolves. Its own `finally` must not
+    // be allowed to clear `loading` in the meantime.
+    await firstLoad
+    expect(result.loading.value).toBe(true)
+
+    second.resolve([openTask])
+    await secondLoad
 
     expect(secondSignal?.aborted).toBe(false)
     expect(result.tasks.value).toEqual([openTask])
     expect(result.error.value).toBeNull()
+    expect(result.loading.value).toBe(false)
   })
 
   it('aborts an in-flight load when the component unmounts', async () => {

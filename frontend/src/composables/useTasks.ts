@@ -14,18 +14,25 @@ export function useTasks() {
     // Cancel a previous load still in flight so a slow, superseded
     // response can't overwrite the result of a newer one.
     loadController?.abort()
-    loadController = new AbortController()
+    const controller = new AbortController()
+    loadController = controller
 
     loading.value = true
     error.value = null
 
     try {
-      tasks.value = await listTasks(loadController.signal)
+      tasks.value = await listTasks(controller.signal)
     } catch (err) {
       if (isAbortError(err)) return
       error.value = toErrorMessage(err)
     } finally {
-      loading.value = false
+      // The aborted call's own finally still runs. Only the request that's
+      // still current should be allowed to clear `loading`, otherwise a
+      // superseded call can flip it to false while its replacement is still
+      // in flight (briefly showing the empty state instead of loading).
+      if (loadController === controller) {
+        loading.value = false
+      }
     }
   }
 

@@ -15,18 +15,25 @@ export function useTaskSummary() {
     // prior one has resolved. Cancel the stale request so an
     // out-of-order response can't overwrite the header with old counts.
     controller?.abort()
-    controller = new AbortController()
+    const activeController = new AbortController()
+    controller = activeController
 
     loading.value = true
     error.value = null
 
     try {
-      summary.value = await getSummary(controller.signal)
+      summary.value = await getSummary(activeController.signal)
     } catch (err) {
       if (isAbortError(err)) return
       error.value = toErrorMessage(err)
     } finally {
-      loading.value = false
+      // The aborted call's own finally still runs. Only the call that's
+      // still current should clear `loading`, otherwise a superseded
+      // refresh can flip it to false while its replacement is still in
+      // flight.
+      if (controller === activeController) {
+        loading.value = false
+      }
     }
   }
 
