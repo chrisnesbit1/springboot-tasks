@@ -35,9 +35,8 @@ async function handleCreate(input: CreateTaskInput) {
   }
 }
 
-async function handleToggle(task: Task) {
-  const nextStatus: TaskStatus = task.status === 'COMPLETED' ? 'OPEN' : 'COMPLETED'
-  await setStatus(task, nextStatus)
+async function handleStatusChange(task: Task, status: TaskStatus) {
+  await setStatus(task, status)
   // setStatus/remove record their own failures in `error`, so only refresh
   // the summary when the mutation actually succeeded.
   if (!error.value) {
@@ -63,7 +62,7 @@ async function handleDelete(task: Task) {
       :tasks="tasks"
       :loading="loading"
       :error="error"
-      @toggle="handleToggle"
+      @status-change="handleStatusChange"
       @delete="handleDelete"
     />
   </main>

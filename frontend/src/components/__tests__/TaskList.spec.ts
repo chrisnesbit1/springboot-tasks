@@ -30,12 +30,12 @@ describe('TaskList', () => {
     expect(wrapper.text()).toContain('Unable to reach the server.')
   })
 
-  it('renders a task and bubbles toggle/delete events', async () => {
+  it('renders a task and bubbles status-change/delete events', async () => {
     const wrapper = mount(TaskList, { props: { tasks: [sampleTask], loading: false, error: null } })
     expect(wrapper.text()).toContain('Write demo notes')
 
-    await wrapper.find('input[type=checkbox]').setValue(true)
-    expect(wrapper.emitted('toggle')?.[0]).toEqual([sampleTask])
+    await wrapper.find('select').setValue('IN_PROGRESS')
+    expect(wrapper.emitted('status-change')?.[0]).toEqual([sampleTask, 'IN_PROGRESS'])
 
     await wrapper.find('.task-item__delete').trigger('click')
     expect(wrapper.emitted('delete')?.[0]).toEqual([sampleTask])

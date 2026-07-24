@@ -2,7 +2,7 @@
 
 ## What Was Added
 
-A small Vue 3 + TypeScript frontend (`frontend/`) for the existing Spring Boot Task Tracker API: list tasks, create a task, mark complete/incomplete, delete with confirmation, and a summary strip near the header that refreshes after every mutation. Built with `<script setup>` and the Composition API throughout.
+A small Vue 3 + TypeScript frontend (`frontend/`) for the existing Spring Boot Task Tracker API: list tasks, create a task, change a task's status via a three-state dropdown (Open / In Progress / Completed), delete with confirmation, and a summary strip near the header that refreshes after every mutation. A task marked In Progress gets a distinct accent border, background tint, and "In Progress" pill so it stands out at a glance; a Completed task keeps its original strikethrough-only treatment, unchanged. Built with `<script setup>` and the Composition API throughout.
 
 ## How to Run It
 
@@ -28,7 +28,8 @@ The frontend calls relative paths (`/tasks`, `/tasks/summary`, ...) via a small 
 - **No Pinia, no Vue Router, no axios, no UI framework.** One view, one composition root (`App.vue`), two composables, six simple JSON endpoints — none of these were justified by the app's actual requirements.
 - **Two independent composables**: `useTasks` (list/create/toggle/delete) and `useTaskSummary` (header counts), composed together in `App.vue`, which also owns the policy of *when* to refresh the summary (after every successful mutation) and the delete-confirmation prompt.
 - **Component boundaries**: `App.vue` owns data and orchestration; `TaskSummary`, `TaskList`, `TaskItem` are presentational (props down, events up); `TaskForm` owns its own input state and client-side validation but leaves error display and reset timing to its parent, so a failed submission never silently clears what the user typed.
-- **`PUT` requires a full task body** (there's no PATCH on the backend) — so toggling completion always resends title/description/status together. This is a consequence of the existing API contract, not a frontend choice, and the contract was not changed.
+- **`PUT` requires a full task body** (there's no PATCH on the backend) — so any status change from the dropdown always resends title/description/status together. This is a consequence of the existing API contract, not a frontend choice, and the contract was not changed.
+- **Status changes go through the same `setStatus` composable function regardless of which status is picked.** The dropdown replaced an earlier binary complete/incomplete checkbox; no backend changes were needed since `PUT /tasks/{id}` already accepted `IN_PROGRESS` as a valid `TaskStatus`.
 
 ## Memory Management
 
@@ -38,13 +39,12 @@ Everything else — component state, template event bindings — is torn down au
 
 ## Testing Performed
 
-- **Automated**: 21 Vitest tests — `useTasks` and `useTaskSummary` (success, empty/failure states, create/update/delete, and two tests that directly prove the `AbortController` cancellation logic works, including the unmount case), plus `TaskList` (all four render states) and `TaskForm` (validation and server-error display).
-- **Manual, live**: drove the actual running app with a headless browser against the real backend — empty state, a blank-form validation error, creating a task, toggling complete and back, deleting with the confirmation dialog, and the summary counts updating correctly after each step. No console errors observed at any point.
+- **Automated**: 27 Vitest tests — `useTasks` and `useTaskSummary` (success, empty/failure states, create/update/delete, and two tests that directly prove the `AbortController` cancellation logic works, including the unmount case), `TaskList` (all four render states plus status-change/delete bubbling), `TaskItem` (dropdown options and selected value, status-change emission, the in-progress pill/accent appearing only for `IN_PROGRESS`, and completed tasks keeping only their strikethrough treatment), and `TaskForm` (validation and server-error display).
+- **Manual, live**: drove the actual running app with a headless browser against the real backend — empty state, a blank-form validation error, creating a task, moving it through Open → In Progress (accent + pill appear) → Completed (pill/accent disappear, strikethrough applies) → back to Open, deleting with the confirmation dialog, and the summary counts updating correctly after each step. No console errors observed at any point.
 - **Backend**: existing test suite re-run after the frontend was added; unaffected, as expected, since no backend files were changed.
 
 ## Known Limitations
 
-- The completion toggle is binary (OPEN ↔ COMPLETED); the backend's `IN_PROGRESS` status exists but isn't reachable from this UI, by design (see `docs/ai-assisted-review-notes.md`).
 - No status filter UI, though the backend supports `?status=`.
 - Production build integration (copying `frontend/dist` into `src/main/resources/static` for a single deployable WAR) is documented but not automated in `build.gradle`.
 - No authentication, pagination, or multi-user concerns — all out of scope from the outset.

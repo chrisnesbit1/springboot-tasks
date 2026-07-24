@@ -1,17 +1,24 @@
 <script setup lang="ts">
-import type { Task } from '@/types/task'
+import type { Task, TaskStatus } from '@/types/task'
 
 const props = defineProps<{
   task: Task
 }>()
 
 const emit = defineEmits<{
-  toggle: [task: Task]
+  'status-change': [task: Task, status: TaskStatus]
   delete: [task: Task]
 }>()
 
-function handleToggle() {
-  emit('toggle', props.task)
+const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
+  { value: 'OPEN', label: 'Open' },
+  { value: 'IN_PROGRESS', label: 'In Progress' },
+  { value: 'COMPLETED', label: 'Completed' },
+]
+
+function handleStatusChange(event: Event) {
+  const status = (event.target as HTMLSelectElement).value as TaskStatus
+  emit('status-change', props.task, status)
 }
 
 function handleDelete() {
@@ -20,18 +27,22 @@ function handleDelete() {
 </script>
 
 <template>
-  <li class="task-item">
+  <li class="task-item" :class="{ 'task-item--in-progress': task.status === 'IN_PROGRESS' }">
     <div class="task-item__main">
-      <label class="task-item__checkbox">
-        <input
-          type="checkbox"
-          :checked="task.status === 'COMPLETED'"
-          :aria-label="`Mark '${task.title}' as ${task.status === 'COMPLETED' ? 'incomplete' : 'complete'}`"
-          @change="handleToggle"
-        />
-        <span :class="{ 'task-item__title--done': task.status === 'COMPLETED' }">{{ task.title }}</span>
-      </label>
-      <span class="task-item__status">{{ task.status }}</span>
+      <select
+        class="task-item__status-select"
+        :value="task.status"
+        :aria-label="`Change status for '${task.title}'`"
+        @change="handleStatusChange"
+      >
+        <option v-for="option in STATUS_OPTIONS" :key="option.value" :value="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+      <span class="task-item__title" :class="{ 'task-item__title--done': task.status === 'COMPLETED' }">{{
+        task.title
+      }}</span>
+      <span v-if="task.status === 'IN_PROGRESS'" class="task-item__badge">In Progress</span>
       <button
         type="button"
         class="task-item__delete"
@@ -48,9 +59,15 @@ function handleDelete() {
 <style scoped>
 .task-item {
   border: 1px solid #ddd;
+  border-left: 4px solid transparent;
   border-radius: 6px;
   padding: 0.75rem 1rem;
   margin-bottom: 0.5rem;
+}
+
+.task-item--in-progress {
+  border-left-color: #2f6fed;
+  background: rgba(47, 111, 237, 0.06);
 }
 
 .task-item__main {
@@ -59,12 +76,12 @@ function handleDelete() {
   gap: 0.75rem;
 }
 
-.task-item__checkbox {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.task-item__status-select {
+  flex-shrink: 0;
+}
+
+.task-item__title {
   flex: 1;
-  cursor: pointer;
 }
 
 .task-item__title--done {
@@ -72,10 +89,14 @@ function handleDelete() {
   color: #888;
 }
 
-.task-item__status {
-  font-size: 0.75rem;
+.task-item__badge {
+  background: #2f6fed;
+  color: #fff;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  color: #666;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
   white-space: nowrap;
 }
 
