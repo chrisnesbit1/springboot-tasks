@@ -49,3 +49,19 @@ This was accepted and changed the design in a real way, not cosmetically:
 - No production build integration into the Spring Boot artifact (documented as a manual/optional step, not automated).
 - No status filter UI, despite the backend supporting `?status=`.
 - No pagination, authentication, or multi-user considerations — all explicitly out of scope from the start.
+
+## Follow-Up (2026-07-24): Three-State Status Dropdown
+
+This resolves the limitation logged above in "Risks Discovered" — the checkbox only distinguished OPEN ↔ COMPLETED, with `IN_PROGRESS` unreachable from the UI. The author asked for a way to set `IN_PROGRESS` with a distinct visual treatment, without changing the add-task form.
+
+- **No backend changes.** `PUT /tasks/{id}` already accepted `IN_PROGRESS` as a valid `TaskStatus`; this was purely a frontend gap.
+- **Native `<select>` over a custom dropdown component.** Three fixed, known options with no need for search/multi-select/async loading — a plain `<select>` satisfies the requirement without a new dependency, consistent with "no UI framework."
+- **`TaskItem`'s `toggle` event became `status-change`**, carrying the task and the newly selected `TaskStatus` directly, replacing the old binary compute-the-opposite-status logic in `App.vue`. `useTasks`'s `setStatus(task, status)` needed no changes — it was already generic, just previously only ever called with two of the three possible values.
+- **Visual treatment for `IN_PROGRESS`**: a left accent border, a light background tint on the whole task row, and an "In Progress" pill badge (the author explicitly asked for the pill in addition to the accent). `COMPLETED` intentionally keeps its original strikethrough-only rendering, unchanged — the author was explicit that marking a task complete should not alter how it looks today.
+- Added `TaskItem.spec.ts` (previously only exercised indirectly through `TaskList.spec.ts`) to assert the dropdown's options/selected value, the emitted event payload, the pill/accent appearing only for `IN_PROGRESS`, and completed tasks rendering with no pill/accent.
+
+### Verification Performed (this follow-up)
+
+- `npm run test:unit` (27 tests, all passing), `npm run build` (type-check + build), and `npm run lint` all clean.
+- `./gradlew test` re-run to confirm zero backend impact (no backend files touched).
+- Live manual walkthrough with a headless browser against the real running app: created a task, moved it Open → In Progress (accent + pill appear) → Completed (pill/accent disappear, strikethrough applies, matching the pre-existing look) → back to Open, with the summary counts updating correctly at each step and no console errors.

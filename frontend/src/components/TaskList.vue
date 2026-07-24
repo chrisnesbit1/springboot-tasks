@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Task } from '@/types/task'
+import type { Task, TaskStatus } from '@/types/task'
 import TaskItem from '@/components/TaskItem.vue'
 
 defineProps<{
@@ -9,7 +9,7 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  toggle: [task: Task]
+  'status-change': [task: Task, status: TaskStatus]
   delete: [task: Task]
 }>()
 </script>
@@ -26,7 +26,7 @@ const emit = defineEmits<{
         v-for="task in tasks"
         :key="task.id"
         :task="task"
-        @toggle="emit('toggle', task)"
+        @status-change="(_task, status) => emit('status-change', task, status)"
         @delete="emit('delete', task)"
       />
     </ul>
