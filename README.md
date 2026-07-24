@@ -8,7 +8,7 @@
 
 This project is a lightweight Task Tracker web app with Vue.JS and a REST API built with Spring Boot.
 
-The goal was to spend a focused weekend ramping up on Spring Boot and produce a small, working backend service with clear structure, tests, validation, and API documentation. The scope is intentionally narrow: it is not a full product, but it is meant to show the kind of production-oriented habits I would bring while learning a newer stack.
+The goal was to spend a few days refreshing my Vue.JS skills and ramping up on Spring Boot and produce a small, working backend service with clear structure, tests, validation, and API documentation. The scope is intentionally narrow: it is not a full product, but it is meant to show the kind of production-oriented habits I would bring while learning a newer stack.
 
 My production background has primarily been in the .NET ecosystem, so this repository is also a practical exercise in transferring backend engineering patterns—layered architecture, dependency injection, validation, error handling, and automated tests—into a Java/Spring Boot project.
 
