@@ -1,4 +1,4 @@
-# Spring Boot Task Tracker API
+# Spring Boot Task Tracker
 
 <img width="900" height="703" alt="Task Tracker UI showing open, in-progress, and completed tasks with the status dropdown" src="docs/screenshots/task-tracker-overview.png" />
 <img width="1510" height="913" alt="image" src="https://github.com/user-attachments/assets/0f80a20f-7b57-406c-ae0a-d999c9bd9dee" />
@@ -6,7 +6,7 @@
 
 ## Overview
 
-This project is a lightweight Task Tracker REST API built with Spring Boot.
+This project is a lightweight Task Tracker web app with Vue.JS and a REST API built with Spring Boot.
 
 The goal was to spend a focused weekend ramping up on Spring Boot and produce a small, working backend service with clear structure, tests, validation, and API documentation. The scope is intentionally narrow: it is not a full product, but it is meant to show the kind of production-oriented habits I would bring while learning a newer stack.
 
@@ -17,6 +17,7 @@ My production background has primarily been in the .NET ecosystem, so this repos
 This version includes:
 
 * A Spring Boot REST API for task management
+* A Vue.JS frontend
 * Layered controller, service, and repository structure
 * In-memory persistence through a repository abstraction
 * DTO-based request and response models
